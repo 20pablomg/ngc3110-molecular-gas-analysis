@@ -16,8 +16,8 @@ Thumbs.db
 *.fts
 *.30m
 # Raw exported spectra and generated tables (potentially restricted)
-spectra/*.dat
-results/**/*.dat
+spectra/
+results/
 # Generated figures: include only explicitly reviewed images
 figures/**/*.pdf
 

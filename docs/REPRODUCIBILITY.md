@@ -12,7 +12,7 @@
 - `results/ResultadosCLASS/W_<line>_fit_results.dat` and `W_<line>_moment_results.dat`
 - `results/ResultadosHNC/upper_limit_HNC_2_results.dat`
 
-Place permitted private inputs in these relative locations under the repository root. Python notebooks locate the root from the working directory (root or `notebooks/`) and do not depend on a Windows username or absolute drive path. CLASS scripts remain **dataset-specific** and assume an explicit working-directory layout and a configured GILDAS installation.
+Run `python src/prepare_workdirs.py` first to create local working directories, then place permitted private inputs in these relative locations under the repository root. `results/` and `spectra/` are not tracked by Git. Python notebooks locate the root from the working directory (root or `notebooks/`) and do not depend on a Windows username or absolute drive path. CLASS scripts remain **dataset-specific** and assume an explicit working-directory layout and a configured GILDAS installation.
 
 ## CLASS export
 
@@ -31,4 +31,4 @@ Place permitted private inputs in these relative locations under the repository 
 1. Install Python requirements from the repository root.
 2. Review the notebooks and their retained historical figures and tables in GitHub or Jupyter.
 3. If authorized datasets are available, place them in the paths above and rerun notebooks from the project root.
-4. Validate all numerics against the published thesis tables. Intermediate tables can be exported to `results/`, which is ignored by Git.
+4. Validate all numerics against the published thesis tables. Intermediate tables can be exported to `results/`, which is ignored by Git. Run the setup helper before running CLASS to ensure that output directories exist.
