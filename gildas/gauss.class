@@ -1,0 +1,112 @@
+!TRABAJO DESDE LA CARPETA CON LOS .class: HAY QUE PONER ../30m/ PARA UBICAR EL ARCHIVO EN LA CARPETA QUE CORRESPONDE
+
+!Archivo de entrada hecho la media de las observaciones que tratamos
+file in ../30m/W_SD_average.30m
+
+!===============================================================================
+!                              BLOQUE AJUSTE GAUSSIANO 
+!===============================================================================
+
+!Archivo de salida con el ajuste hecho y los resultados que necesito
+file out ../30m/W_SHNC_fit.30m single /overwrite
+
+!Defino los parametros del analisis y el dat de salida
+define character*32 fuente 
+define character*32 linea 
+define character*16 backend 
+
+fuente    = "NGC3110_SOU"
+linea    = "HNC"
+backend   = "both"
+
+!Defino variables
+define real vmin vmax surf pos fwhm err_surf err_pos err_fwhm rms_b rms_l integ xmin xmax
+
+find
+get first
+
+!Fijo velocidad que se observa mas facilmente
+set format f
+set unit v f
+
+!Fijo la ventana de datos donde hare el ajuste (ajustando mas que para hacer base)
+vmin = -2800
+vmax = -2300
+
+!Resto sobre el promedio para eliminar tendencias
+set window vmin vmax 
+set mode x auto
+base 0
+
+!Aplico esa ventana de datos
+let xmin = vmin-500
+let xmax = vmax+500
+set mode x xmin xmax
+plot 
+
+!Realizo ajuste gaussiano sobre la linea elegida
+fit\method gauss
+!Para picos que se observan claramente, el programa hace el ajuste a la región con mayor flujo
+!fit\lines 0
+!Para los que se observa de manera muy leve (lo he tenido que usar con HCN en el norte)
+fit\lines 1
+fit\minimize
+
+write
+
+fit\visualize
+
+!Guardar plot en pdf
+! Optional publication-only plot export (disabled by default):
+! hard ../plots/W_SHNCplot.pdf /device pdf /overwrite
+
+!Guardar espectro para plots en python
+sic output ../spectra/W_SHNC_spectrum.dat new
+say "vel(kms) Tmb(mK)"
+for l 1 to channels
+    say 'rx[l]' 'ry[l]*1000'
+next
+sic output
+
+
+!Extraer variables del fit desde cabecera
+surf     = r%head%gau%result[1]
+pos      = r%head%gau%result[2]
+fwhm     = r%head%gau%result[3]
+err_surf = r%head%gau%error[1]
+err_pos  = r%head%gau%error[2]
+err_fwhm = r%head%gau%error[3]
+rms_b    = r%head%gau%rms_base
+rms_l    = r%head%gau%rms_line
+
+! Export the Gaussian fit directly as a whitespace-separated table.
+! This script is configured for the SOUTH HNC pointing (see setup above).
+! For other positions/lines, adjust source, transition, windows and output paths.
+! Direct export replaces the lost write_results.py helper.
+! I_fit and err_I are in K km/s; velocities are in km/s.
+sic output ../results/ResultadosCLASS/W_HNC_fit_results.dat new
+say "fuente linea I_fit err_I v_center err_v FWHM err_FWHM"
+say 'fuente' 'linea' 'surf' 'err_surf' 'pos' 'err_pos' 'fwhm' 'err_fwhm'
+sic output
+
+!===============================================================================
+!                        DIRECT VELOCITY INTEGRATION
+!===============================================================================
+! The manual integral and its uncertainty reproduce the original method.
+! The independent CLASS MOMENT result is NOT duplicated or invented.
+! Downstream tools accept the absence of an I_moment column.
+define real integral err_int
+integral = 0
+for i 1 to channels
+    if (rx[i].ge.vmin.and.rx[i].le.vmax) then
+        if (ry[i].gt.-900)
+            let integral = integral+ry[i]*abs(velo_step)
+        endif
+    endif
+next
+let err_int = sigma*abs(velo_step)*sqrt((vmax-vmin)/abs(velo_step))
+
+sic output ../results/ResultadosCLASS/W_HNC_moment_results.dat new
+say "fuente linea I_manual SigmaI"
+say 'fuente' 'linea' 'integral' 'err_int'
+sic output

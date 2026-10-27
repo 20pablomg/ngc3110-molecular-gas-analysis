@@ -1,0 +1,46 @@
+!TRABAJO DESDE LA CARPETA CON LOS .class: HAY QUE PONER ../30m/ PARA UBICAR EL ARCHIVO EN LA CARPETA QUE CORRESPONDE
+
+!Archivo de entrada ya smooth y base
+file in ../30m/W_SD_base.30m 
+
+!set telescope 30ME0VLI-W02 
+
+!Archivo de salida con la suma de todas las observaciones, este es el que se necesita
+file out ../30m/W_SD_average.30m single /overwrite
+
+find
+
+average 
+
+!Modifico la eficiencia para sustraer los efectos de perdida (Sideloabs, formard, etc...) iram.es/iram30mefficiencies
+!Linea 12CO21_5
+!modify beam_eff 0.59 
+!Linea 12CO10_6 
+!modify beam_eff 0.78
+!Linea DenseGas_red
+modify beam_eff 0.8
+
+!Puedo centrar la grafica corrigiendo el redshift para las lineas de CO
+
+define real z freq_rec c vsys
+
+vsys = 4990 !(Espada et al. 2018)
+c =  2.99792478e5 
+z = vsys|c 
+
+!Para 12CO10_6
+!freq_rec = 115.271204|(1+z)
+!modify frequency freq_rec*1.e3
+
+!Para 12CO21_5
+!freq_rec = 230.5358|(1+z)
+!modify frequency freq_rec*1.e3
+
+set unit v f
+!modify velocity 'vsys'
+
+write
+
+plot
+
+!si no veo las 3 (en densegas_red) puedo calcular donde deberia de estar la tercera y hacer gauss alrededor o hacer sm b para verla mejor y jugar con el redshift 

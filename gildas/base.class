@@ -1,0 +1,41 @@
+!TRABAJO DESDE LA CARPETA CON LOS .class: HAY QUE PONER ../30m/ PARA UBICAR EL ARCHIVO EN LA CARPETA QUE CORRESPONDE
+
+!Archivo con todas las observaciones del receptor para los 3 dias
+file in ../30m/wilma_all.30m
+
+!Archivo de salida indicando el receptor: R, la fuente: S, la linea: L, el backend: T. 
+file out ../30m/W_SD_base.30m single /overwrite
+
+!Variables iniciales: unidades del eje x, defino variables reales, etc...
+set align f c
+set unit v f
+define real vmin1 vmax1 vmin2 vmax2 vmin3 vmax3
+
+!Fijo fuente, linea y backend correspondientes.
+set source N3110_SOU
+set line DenseGas_red
+!set telescope 30ME0VLI-W02 
+
+find
+
+!Fijo las ventanas donde se que habra lineas para despues sustraer el ruido de fondo
+vmin1 = 3500
+vmax1 = 4875
+vmin2 = -3250
+vmax2 = -1900
+vmin3 = 1600
+vmax3 = 3000
+
+set window vmin1 vmax1 vmin2 vmax2 vmin3 vmax3
+
+!Creo un bucle para restar el fondo a cada scan
+for i 1 to found
+    get next
+    base 1
+    smooth box 4
+    plot
+    draw window
+    write
+!    pause
+next
+

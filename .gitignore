@@ -1,0 +1,29 @@
+# Python / Jupyter
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.venv/
+venv/
+.env
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+# Original science data: permissions must be checked before publication
+*.fits
+*.fit
+*.fts
+*.30m
+# Raw exported spectra and generated tables (potentially restricted)
+spectra/*.dat
+results/**/*.dat
+# Generated figures: include only explicitly reviewed images
+figures/**/*.pdf
+
+# Private/derived tabular products
+results/*.dat
+results/**/*.dat
+results/**/*.fits
+# Test artefacts
+.pytest_cache/
