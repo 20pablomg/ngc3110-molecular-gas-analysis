@@ -1,1 +1,1 @@
-Place only reviewed, author-owned or licensed figures here.
+Selected archived figures extracted from the author’s original executed notebooks. All saved plots are also embedded in the corresponding notebooks. These are derived visualizations, not original observational datasets. Publication rights must be confirmed with the data owners.
