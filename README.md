@@ -6,6 +6,14 @@ Scientific data analysis of the molecular gas in the interacting luminous infrar
 
 > **Data availability:** Original telescope observations, ALMA FITS maps and third-party observational data are **not distributed** because the author does not hold the rights to redistribute them. This repository includes the analysis scripts, methodological documentation and the original notebooks’ saved figures and tabular results. **Derived visualizations may still be subject to third-party publication conditions; confirm permissions with the supervisor before making the repository public.** **A complete rerun requires privately obtained authorized data; full reproduction has not been independently verified.**
 
+## Bachelor's Thesis
+
+This repository contains the Python and GILDAS/CLASS code developed for my Bachelor's Thesis in Physics, titled *"Conditions for the Onset of a Starburst: Studying Dense Gas in NGC 3110"*.
+
+The complete thesis, including the scientific background, methodology, results, and conclusions, is available here:
+
+**[Read the full Bachelor's Thesis (PDF)](docs/thesis.pdf)**
+
 ## Research objectives
 
 The original study compared the northern spiral arm, the galaxy center and the southern spiral arm to evaluate:
